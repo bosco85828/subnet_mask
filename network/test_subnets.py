@@ -47,13 +47,11 @@ class TestSubnets(unittest.TestCase):
         subnets = sub.Subnets(['10.0.0.0/8', '5.0.0.0/8', '9.0.0.0/8', '8.0.0.1/9'])
         self.assertEqual(subnets.get_smallest_supernet().to_string(), '0.0.0.0/4')
 
-        # No bits common
+        # Longest common prefix length is 0
         subnets = sub.Subnets(['64.0.0.0/8', '128.0.0.0/8'])
         self.assertEqual(subnets.get_smallest_supernet(), None)
 
         # Prefix length smaller than length of longest common prefix
-        subnets = sub.Subnets(['10.10.0.1/8', '10.10.0.200/8'])
-        self.assertEqual(subnets.get_smallest_supernet().to_string(), '10.0.0.0/8')
         subnets = sub.Subnets(['10.10.0.1/10', '10.10.0.200/11'])
         self.assertEqual(subnets.get_smallest_supernet().to_string(), '10.0.0.0/10')
 

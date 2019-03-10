@@ -12,7 +12,10 @@ class Subnets:
 
     def get_smallest_supernet(self):
         """
-        Get the smallest supernet for all the subnets in the list
+        Get the smallest supernet for all the subnets in the list.
+        Time complexity: O(n) where n is the number of subnets in the input list
+        Space complexity: O(1) as the algorithm uses constant space for any size of input
+
         :return: CIDR notation of network containing smallest number of
                  IPV4 addresses after prefix aggregation of all the subnets
         :type: CIDR
@@ -37,7 +40,7 @@ class Subnets:
             # Find index of first bit from left which flipped
             bitindex = 128
 
-            # Mask for removing all uncommon bits
+            # Mask for setting all bits in host part of subnet to 0
             bitmask = 255
             bits = mask_or.octets[i] ^ supernet.octets[i]
 
