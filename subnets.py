@@ -9,39 +9,38 @@ class Subnets:
 
     def get_smallest_supernet(self):
         supernet = CIDR("255.255.255.255/0")
+        mask_or = CIDR("0.0.0.0/0")
+        min_prefix_len = 32
 
-        # perform bitwise & operation on all the cidrs
-        # this operation would only keep the common bits
+        # perform bitwise AND and OR operation on all the cidrs
+        # AND operation would only keep the common bits
+        # OR operation would be used to obtain the prefix length
         for subnet in self.subnets:
             for i in range(4):
                 supernet.octets[i] &= subnet.octets[i]
+                mask_or.octets[i] |= subnet.octets[i]
+            min_prefix_len = min(min_prefix_len, subnet.prefix_len)
 
-        # calculate xor masks - used to find the first changing bit
-        # calculate or mask
-        mask_xor = []
-        mask_or = []
-        for o in self.subnets[0].octets:
-            mask_xor.append(o)
-            mask_or.append(o)
-
-        for subnet in self.subnets[1:]:
-            for i in range(4):
-                mask_or[i] |= subnet.octets[i]
-                mask_xor[i] ^= subnet.octets[i]
-
-        # calculate supernet
-        found = False
+        # calculate prefix length and mask all bits beyond this length
+        longest_common_prefix_found = False
         supernet.prefix_len = 0
         for i in range(4):
-            bitmask = 128
-            bits = mask_or[i] ^ supernet.octets[i]
-            supernet.octets[i] &= ~mask_xor[i]
-            while bitmask and not found:
-                if bits & bitmask:
-                    found = True
+            # find index of first bit from left which flipped
+            bitindex = 128
+
+            # mask for removing all uncommon bits
+            bitmask = 255
+            bits = mask_or.octets[i] ^ supernet.octets[i]
+
+            while bitindex and not longest_common_prefix_found:
+                if bits & bitindex or supernet.prefix_len == min_prefix_len:
+                    longest_common_prefix_found = True
                 else:
                     supernet.prefix_len += 1
-                bitmask >>= 1
+                    bitindex >>= 1
+                    bitmask >>= 1
+
+            # mask all bits beyond prefix length
+            supernet.octets[i] &= ~bitmask
 
         return supernet
-

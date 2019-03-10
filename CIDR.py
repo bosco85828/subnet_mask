@@ -16,7 +16,7 @@ class CIDR:
             raise ValueError("Illegal value for prefix length. Integer expected.")
 
         # check for prefix length range
-        if 0 > prefix_len or prefix_len > 32:
+        if prefix_len < 0 or prefix_len > 32:
             raise ValueError("Illegal value for prefix length. Should be within range [0, 32].")
 
         # check for octet count
@@ -32,12 +32,13 @@ class CIDR:
             except ValueError:
                 raise ValueError("Illegal value for IP address. Octet values cannot contain non-numeric characters.")
             else:
-                if 0 > int_octet or int_octet > 255:
+                if int_octet < 0 or int_octet > 255:
                     raise ValueError("Illegal value for IP address. Octet value should be an integer within [0, 255].")
                 int_octets.append(int_octet)
 
         return int_octets, prefix_len
 
+    #
     def stringify(self):
         return ".".join([str(o) for o in self.octets]) + "/" + str(self.prefix_len)
 
