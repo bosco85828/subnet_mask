@@ -7,6 +7,10 @@ class TestSubnets(unittest.TestCase):
         """
         Test cases for __init__ function
         """
+        # Check for empty subnets list
+        self.assertRaises(ValueError, sub.Subnets, [])
+        ValueError("Please provide at least one subnet when initializing")
+
         # Check correct representation of CIDRs
         cidrs = ['10.0.0.0/8', '5.0.0.0/8', '9.0.0.0/8']
         subnets = sub.Subnets(cidrs)

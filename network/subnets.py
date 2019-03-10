@@ -3,6 +3,9 @@ from network.CIDR import CIDR
 
 class Subnets:
     def __init__(self, subnets):
+        if not subnets:
+            raise ValueError("Please provide at least one subnet when initializing")
+
         self.subnets = []
         for subnet in subnets:
             self.subnets.append(CIDR(subnet))
