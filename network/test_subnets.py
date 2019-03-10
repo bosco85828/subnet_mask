@@ -49,7 +49,7 @@ class TestSubnets(unittest.TestCase):
 
         # No bits common
         subnets = sub.Subnets(['64.0.0.0/8', '128.0.0.0/8'])
-        self.assertEqual(subnets.get_smallest_supernet().to_string(), '0.0.0.0/0')
+        self.assertEqual(subnets.get_smallest_supernet(), None)
 
         # Prefix length smaller than length of longest common prefix
         subnets = sub.Subnets(['10.10.0.1/8', '10.10.0.200/8'])

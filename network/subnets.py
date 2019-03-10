@@ -52,4 +52,8 @@ class Subnets:
             # Mask all bits beyond prefix length
             supernet.octets[i] &= ~bitmask
 
-        return supernet
+        # Return None if the networks cannot be aggregated
+        if supernet.prefix_len == 0:
+            return None
+        else:
+            return supernet
