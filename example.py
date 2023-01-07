@@ -2,16 +2,16 @@
 import network
 import os 
 import sys
-# wafip=[['1', '1', '1', '1/24'], ['182', '160', '3', '0/24'], ['182', '160', '4', '0/24'], ['182', '160', '16', '0/24'],['203', '162', '81', '0/24'],['207', '46', '81', '0/24'],['207', '46', '95', '0/24'], ['207', '46', '96', '0/24']]
+
 
 def get_devops_waf():
     f=os.popen(""" 
-            curl "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFo3cneii8CkIaLP-kClutWu42JzRsaw1SaLYJSRQXf0EX9RyE6psTq1HZUw3WieV9Ehqh1WQ1t11j/pub?output=csv" -Ls | tr -d ' ' |  sort -V | uniq
+            curl "google doc" -Ls | tr -d ' ' |  sort -V | uniq
             """)
 
     wafl=f.read().strip().split('\n')
-    # print(wafl)
-    # wafl=["1.1.1.1","2.2.2.0/24","2.2.14.0","3.3.3.3"]
+
+
     wafl=[ x if "/" in x else x+"/32" for x in wafl ]
     wafip=[ x.split('.') for x in wafl if x ]
     return wafip    
