@@ -1,2 +1,2 @@
-from CIDR import *
-from subnets import *
+from network.CIDR import *
+from network.subnets import *
